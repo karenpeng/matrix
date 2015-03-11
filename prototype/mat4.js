@@ -12,6 +12,9 @@ function Mat4(a00, a01, a02, a03, a10, a11, a12, a13, a20, a21, a22, a23, a30, a
 }
 
 Mat4.prototype = {
+  // OneToTwo: function (x, y) {
+  //   return this.element[x * 4 + y]
+  // },
 
   translate: function (x, y, z) {
     this.element = new Float32Array([
@@ -35,24 +38,23 @@ Mat4.prototype = {
     this.element = new Float32Array([
       1, 0, 0, 0,
       0, Math.cos(theta), Math.sin(theta), 0,
-      0, Math.sin(theta), Math.cos(theta), 0,
+      0, -Math.sin(theta), Math.cos(theta), 0,
       0, 0, 0, 1
     ])
   },
 
   rotateY: function (theta) {
     this.element = new Float32Array([
-      Math.cos(theta), 0, Math.cos(theta), 0,
+      Math.cos(theta), 0, -Math.sin(theta), 0,
       0, 1, 0, 0,
-      Math.sin(theta), 0, Math.sin(theta), 0,
+      Math.sin(theta), 0, Math.cos(theta), 0,
       0, 0, 0, 1
     ])
   },
 
   rotateZ: function (theta) {
     this.element = new Float32Array([
-      Math.cos(theta), Math.sin(theta), 0, 0,
-      Math.sin(theta), Math.cos(thesta), 0, 0,
+      Math.cos(theta), Math.sin(theta), 0, 0, -Math.sin(theta), Math.cos(thesta), 0, 0,
       0, 0, 1, 0,
       0, 0, 0, 1
     ])

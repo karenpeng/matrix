@@ -1,7 +1,6 @@
 var Mat4 = require('./mat4.js')
 var Vec4 = require('./vec4.js')
 var operate = require('./operate.js')
-require('./dat.gui.js')
 
 var pts = [
   Vec4(-1, -1, -1, 1),
@@ -158,6 +157,9 @@ var DISTANCE_FROM_CAMERA_TO_CANVAS, FOV, ASPECT, NEAR, FAR, transformMatrix
 //var gui = new dat.GUI()
 //gui.add(text, '')
 //console.log(oo.length + ' ' + ood.length)
+var shoulder = Vec4(0, 0, 0, 1)
+var elbow = Vec4(0, 0, 0, 1)
+var fingerTip = Vec4()
 
 function init() {
   canvas = document.getElementById('canvas1')
@@ -321,65 +323,89 @@ function render() {
 
   var eyeMatrix = Mat4.translate(0, 0, DISTANCE_FROM_CAMERA_TO_ZERO)
   var projectionMatrix = Mat4.perspective(FOV, ASPECT, NEAR, FAR)
-  var mat4 = Mat4()
+    //var mat4 = Mat4()
     //console.log(mat4[4])
-  console.log(rotateXM)
-  mat4 = operate.multiply(mat4, rotateXM)
-  mat4 = operate.multiply(mat4, rotateYM)
-  mat4 = operate.multiply(mat4, rotateZM)
-  mat4 = operate.multiply(mat4, scaleM)
+    //console.log(rotateXM)
+    // mat4 = operate.multiply(mat4, rotateXM)
+    // mat4 = operate.multiply(mat4, rotateYM)
+    // mat4 = operate.multiply(mat4, rotateZM)
+    // mat4 = operate.multiply(mat4, scaleM)
     //console.log(mat4)
 
-  for (var i = 0; i < edges.length; i++) {
+  // for (var i = 0; i < edges.length; i++) {
 
-    var p0 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(mat4, pts[edges[i][0]]))
-    var p1 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(mat4, pts[edges[i][1]]))
-      //console.log(matrixStack)
-      //var O1 = new multiplyThemAll(matrixStack, pts[edges[i][0]]).exec()
-      //var O2 = multiplyThemAll(matrixStack, pts[edges[i][1]])
-      //console.log(O1)
+  //   var p0 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(mat4, pts[edges[i][0]]))
+  //   var p1 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(mat4, pts[edges[i][1]]))
+  //     //console.log(matrixStack)
+  //     //var O1 = new multiplyThemAll(matrixStack, pts[edges[i][0]]).exec()
+  //     //var O2 = multiplyThemAll(matrixStack, pts[edges[i][1]])
+  //     //console.log(O1)
 
-    // var E1 = operate.multiply(Mat4.inverse(eyeMatrix), O1)
-    // var E2 = operate.multiply(Mat4.inverse(eyeMatrix), O2)
-    //console.log(p0)
-    var a = depthPerspective(p0)
-    var b = depthPerspective(p1)
-      // var a = depthPerspective(E1)
-      // var b = depthPerspective(E2)
-      //
-      // console.log(p0)
-      // var a = operate.multiply(projectionMatrix, p0)
-      // var b = operate.multiply(projectionMatrix, p1)
-      // var a = [],
-      //   b = []
+  //   // var E1 = operate.multiply(Mat4.inverse(eyeMatrix), O1)
+  //   // var E2 = operate.multiply(Mat4.inverse(eyeMatrix), O2)
+  //   //console.log(p0)
+  //   var a = depthPerspective(p0)
+  //   var b = depthPerspective(p1)
+  //     // var a = depthPerspective(E1)
+  //     // var b = depthPerspective(E2)
+  //     //
+  //     // console.log(p0)
+  //     // var a = operate.multiply(projectionMatrix, p0)
+  //     // var b = operate.multiply(projectionMatrix, p1)
+  //     // var a = [],
+  //     //   b = []
 
-    // a[0] = p0[0] * DISTANCE_FROM_CAMERA_TO_CANVAS / (p0[2] + DISTANCE_FROM_CAMERA_TO_ZERO)
-    // a[1] = p0[1] * DISTANCE_FROM_CAMERA_TO_CANVAS / (p0[2] + DISTANCE_FROM_CAMERA_TO_ZERO)
-    // a[2] = DISTANCE_FROM_CAMERA_TO_CANVAS - DISTANCE_FROM_CAMERA_TO_ZERO
-    // b[0] = p1[0] * DISTANCE_FROM_CAMERA_TO_CANVAS / (p0[2] + DISTANCE_FROM_CAMERA_TO_ZERO)
-    // b[1] = p1[1] * DISTANCE_FROM_CAMERA_TO_CANVAS / (p0[2] + DISTANCE_FROM_CAMERA_TO_ZERO)
-    // b[2] = DISTANCE_FROM_CAMERA_TO_CANVAS - DISTANCE_FROM_CAMERA_TO_ZERO
-    // console.log(a)
+  //   // a[0] = p0[0] * DISTANCE_FROM_CAMERA_TO_CANVAS / (p0[2] + DISTANCE_FROM_CAMERA_TO_ZERO)
+  //   // a[1] = p0[1] * DISTANCE_FROM_CAMERA_TO_CANVAS / (p0[2] + DISTANCE_FROM_CAMERA_TO_ZERO)
+  //   // a[2] = DISTANCE_FROM_CAMERA_TO_CANVAS - DISTANCE_FROM_CAMERA_TO_ZERO
+  //   // b[0] = p1[0] * DISTANCE_FROM_CAMERA_TO_CANVAS / (p0[2] + DISTANCE_FROM_CAMERA_TO_ZERO)
+  //   // b[1] = p1[1] * DISTANCE_FROM_CAMERA_TO_CANVAS / (p0[2] + DISTANCE_FROM_CAMERA_TO_ZERO)
+  //   // b[2] = DISTANCE_FROM_CAMERA_TO_CANVAS - DISTANCE_FROM_CAMERA_TO_ZERO
+  //   // console.log(a)
 
-    // var a = p0
-    // var b = p1
-    // context.beginPath()
-    // context.moveTo(viewport(a)[0], viewport(a)[1])
-    // context.lineTo(viewport(b)[0], viewport(b)[1])
-    // context.stroke()
+  //   // var a = p0
+  //   // var b = p1
+  //   // context.beginPath()
+  //   // context.moveTo(viewport(a)[0], viewport(a)[1])
+  //   // context.lineTo(viewport(b)[0], viewport(b)[1])
+  //   // context.stroke()
 
-    context.beginPath();
-    context.moveTo(w / 2 + w / 4 * a[0], h / 2 - w / 4 * a[1]);
-    context.lineTo(w / 2 + w / 4 * b[0], h / 2 - w / 4 * b[1]);
-    context.stroke();
-  }
+  //   context.beginPath();
+  //   var val = Math.floor(128 + 127 * Math.cos(time + i / 10 + i / 10));
+  //   context.strokeStyle = 'rgb(50,200,' + val.toString() + ')';
+
+  //   // context.strokeStyle = "rgb(" + (i * 10).toString() + "," + (i * 10).toString() + "," + (i * 10).toString()
+  //   // ")";
+  //   //context.strokeStyle = 'red'
+  //   context.moveTo(w / 2 + w / 4 * a[0], h / 2 - w / 4 * a[1]);
+  //   context.lineTo(w / 2 + w / 4 * b[0], h / 2 - w / 4 * b[1]);
+  //   context.stroke();
+  // }
+
+  var time = Date.now() * 0.001
+  var x = Math.cos(time) / 2
+  var y = Math.sin(time) / 2
+
+  //var mat4 = Mat4()
+  //console.log(mat4[4])
+  //console.log(rotateXM)
+  var rotateXM = Mat4.rotateX(y)
+
+  var rotateYM = Mat4.rotateY(x)
+
+  var rotateZM = Mat4.rotateZ(y)
+
+  // var scaleM = Mat4.scale(x, x, 1)
+  // mat4 = operate.multiply(mat4, rotateXM)
+  // mat4 = operate.multiply(mat4, rotateYM)
+  // mat4 = operate.multiply(mat4, rotateZM)
+  // mat4 = operate.multiply(mat4, scaleM)
 
   //console.log(oo[0])
   // for (var j = 0; j < ood.length; j++) {
 
-  //   var p0 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(transformMatrix, oo[ood[i][0]]))
-  //   var p1 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(transformMatrix, oo[ood[i][1]]))
-  //   console.log(ood[i][0])
+  //   var p0 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(mat4, oo[ood[j][0]]))
+  //   var p1 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(mat4, oo[ood[j][1]]))
   //     // var p0 = operate.multiply(Mat4.inverse(eyeMatrix), oo[ood[i][0]])
   //     // var p1 = operate.multiply(Mat4.inverse(eyeMatrix), oo[ood[i][1]])
   //     //console.log(p0)
@@ -387,25 +413,36 @@ function render() {
   //   var b = depthPerspective(p1)
 
   //   context.beginPath();
-  //   context.fillText(i, w / 2 + w / 4 * a[0], h / 2 - w / 4 * a[1])
+  //   //context.fillText(i, w / 2 + w / 4 * a[0], h / 2 - w / 4 * a[1])
+  //   var val = Math.floor(128 + 127 * Math.cos(time + j / 10 + j / 10));
+  //   context.strokeStyle = 'rgb(50,' + val.toString() + ',' + val.toString() + ')';
   //   context.moveTo(w / 2 + w / 4 * a[0], h / 2 - w / 4 * a[1]);
   //   context.lineTo(w / 2 + w / 4 * b[0], h / 2 - w / 4 * b[1]);
   //   context.stroke();
   // }
 
-  for (var i = 0; i < oo.length - 1; i++) {
-    var p = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(transformMatrix, oo[i]))
-    var a = depthPerspective(p)
-    var p1 = operate.multiply(Mat4.inverse(eyeMatrix), operate.multiply(transformMatrix, oo[i + 1]))
-    var a1 = depthPerspective(p1)
-    context.beginPath()
-    context.lineWidth = "2";
-    context.strokeStyle = "red";
-    context.fillText(i, w / 2 + w / 4 * a[0], h / 2 - w / 4 * a[1])
-    context.moveTo(w / 2 + w / 4 * a[0], h / 2 - w / 4 * a[1])
-    context.lineTo(w / 2 + w / 4 * a1[0], h / 2 - w / 4 * a1[1])
-    context.stroke()
-  }
+  mat4 = Mat4()
+  mat4 = operate.multiply(mat4, Mat4.rotateZ(Math.cos(time)))
+  mat4 = operate.multiply(mat4, Mat4.translate(0, -.5, 0))
+
+  elbow = Mat4.transform(mat4, shoulder)
+    //console.log(elbow)
+  drawLineBetweenTwoVec(shoulder, elbow)
+  mat4 = operate.multiply(mat4, Mat4.rotateZ(Math.cos(time * 0.01)))
+  mat4 = operate.multiply(mat4, Mat4.translate(0, -.001, 0))
+  fingerTip = Mat4.transform(mat4, elbow)
+  drawLineBetweenTwoVec(elbow, fingerTip)
+
+}
+
+function drawLineBetweenTwoVec(v1, v2) {
+  var a = depthPerspective(v1)
+  var b = depthPerspective(v2)
+  context.beginPath()
+  context.moveTo(w / 2 + w / 4 * a[0], h / 2 - w / 4 * a[1]);
+  context.lineTo(w / 2 + w / 4 * b[0], h / 2 - w / 4 * b[1]);
+  context.stroke();
+
 }
 
 function viewport(p) {

@@ -37,6 +37,7 @@ function multiply(mat4, something) {
   } else {
     //something is a vec4
     var vec4 = something;
+    //console.log(mat4)
     var out = Vec4(
         dot(Vec4(mat4[0], mat4[1], mat4[2], mat4[3]), vec4),
         dot(Vec4(mat4[4], mat4[5], mat4[6], mat4[7]), vec4),

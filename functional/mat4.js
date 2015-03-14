@@ -125,3 +125,12 @@ Mat4.frustum = function (l, r, b, t, n, f) {
   )
 
 }
+
+var dot = require('./operate.js').dot
+var multiply = require('./operate.js').multiply
+
+Mat4.transform = function (mat, src) {
+  //var out = Vec4
+  var dst = multiply(mat, src)
+  return dst
+}

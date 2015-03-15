@@ -21,11 +21,15 @@ GL.prototype.initCamera = function (fov, aspect, near, far) {
 }
 
 GL.prototype.popMatrix = function () {
-  this.stack.pop();
+  var element = this.stack.pop();
+  if (element === '(') {
+    return;
+  }
+  this.popMatrix();
 }
 
 GL.prototype.pushMatrix = function () {
-
+  this.stack.push('(');
 }
 
 GL.prototype.multiplyMatrix = function (m) {
@@ -33,6 +37,7 @@ GL.prototype.multiplyMatrix = function (m) {
   this.currentMatrix = Mat4.identity();
   //console.log(this.stack.length)
   for (var i = 0; i < this.stack.length; i++) {
+    if (this.stack[i] === '(') continue;
     this.currentMatrix = multiply(this.currentMatrix, this.stack[i]);
   }
 }

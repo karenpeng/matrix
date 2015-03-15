@@ -22,11 +22,15 @@ GL.prototype.initCamera = function (fov, aspect, near, far) {
 }
 
 GL.prototype.popMatrix = function () {
-  this.stack.pop();
+  var element = this.stack.pop();
+  if (element === '(') {
+    return;
+  }
+  this.popMatrix();
 }
 
 GL.prototype.pushMatrix = function () {
-
+  this.stack.push('(');
 }
 
 GL.prototype.multiplyMatrix = function (m) {
@@ -34,6 +38,7 @@ GL.prototype.multiplyMatrix = function (m) {
   this.currentMatrix = Mat4.identity();
   //console.log(this.stack.length)
   for (var i = 0; i < this.stack.length; i++) {
+    if (this.stack[i] === '(') continue;
     this.currentMatrix = multiply(this.currentMatrix, this.stack[i]);
   }
 }
@@ -193,67 +198,47 @@ function render() {
   gl.rotateX(time);
   gl.scale(0.8, 0.8, 0.8);
 
-  for (var i = 0; i < edges.length; i++) {
-    var pointToDraw1 = gl.drawPoint(pts[edges[i][0]]);
-    var pointToDraw2 = gl.drawPoint(pts[edges[i][1]]);
+  drawThings(pts, edges, 'red');
 
-    context.beginPath();
-    context.strokeStyle = "red";
-    context.moveTo(pointToDraw1[0], pointToDraw1[1]);
-    context.lineTo(pointToDraw2[0], pointToDraw2[1]);
-    context.stroke();
-  }
-
+  gl.pushMatrix();
+  gl.translate(Math.cos(time), Math.sin(time), 0);
   gl.rotateY(time);
   gl.scale(0.5, 0.5, 0.5);
 
-  for (var i = 0; i < edges.length; i++) {
-    var pointToDraw1 = gl.drawPoint(pts[edges[i][0]]);
-    var pointToDraw2 = gl.drawPoint(pts[edges[i][1]]);
-
-    context.beginPath();
-    context.strokeStyle = "white";
-    context.moveTo(pointToDraw1[0], pointToDraw1[1]);
-    context.lineTo(pointToDraw2[0], pointToDraw2[1]);
-    context.stroke();
-  }
+  drawThings(pts, edges, 'white');
+  gl.popMatrix();
 
   // gl.reset()
-  // gl.rotateX(time * 2);
-  // gl.scale(0.6, 0.6, 0.6);
-
-  // for (var i = 0; i < edges.length; i++) {
-  //   var pointToDraw1 = gl.drawPoint(pts[edges[i][0]]);
-  //   var pointToDraw2 = gl.drawPoint(pts[edges[i][1]]);
-
-  //   context.beginPath();
-  //   context.strokeStyle = "white";
-  //   context.moveTo(pointToDraw1[0], pointToDraw1[1]);
-  //   context.lineTo(pointToDraw2[0], pointToDraw2[1]);
-  //   context.stroke();
-  // }
+  gl.pushMatrix();
+  gl.rotateX(time * 2);
+  gl.scale(0.6, 0.6, 0.6);
+  drawThings(pts, edges, 'green');
 
   gl.popMatrix();
   //gl.scale(1.5, 1.5, 1.5);
   gl.translate(Math.sin(time), 0, Math.cos(time * 2) * 2);
   gl.rotateX(time);
 
-  for (var i = 0; i < ood.length; i++) {
-    var pointToDraw1 = gl.drawPoint(oo[ood[i][0]]);
-    var pointToDraw2 = gl.drawPoint(oo[ood[i][1]]);
-
-    context.beginPath();
-    context.strokeStyle = "yellow";
-    context.moveTo(pointToDraw1[0], pointToDraw1[1]);
-    context.lineTo(pointToDraw2[0], pointToDraw2[1]);
-    context.stroke();
-  }
+  drawThings(oo, ood, 'yellow');
 
 }
 
 function animate() {
   requestAnimationFrame(animate)
   render()
+}
+
+function drawThings(pointArray, edgeArray, color) {
+  for (var i = 0; i < edgeArray.length; i++) {
+    var pointToDraw1 = gl.drawPoint(pointArray[edgeArray[i][0]]);
+    var pointToDraw2 = gl.drawPoint(pointArray[edgeArray[i][1]]);
+
+    context.beginPath();
+    context.strokeStyle = color;
+    context.moveTo(pointToDraw1[0], pointToDraw1[1]);
+    context.lineTo(pointToDraw2[0], pointToDraw2[1]);
+    context.stroke();
+  }
 }
 
 init()

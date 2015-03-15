@@ -69,6 +69,10 @@ gl.prototype.viewport = function (vec3) {
   return [px, py];
 }
 
+gl.prototype.divideW = function(ve3){
+  var x = vec3.x / vec3.z
+}
+
 gl.prototype.translate = function (x, y, z) {
   this.multiplyMatrix(Mat4.translate(x, y, z));
 }

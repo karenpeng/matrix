@@ -116,10 +116,11 @@ Mat4.prototype = {
 
 Mat4.transformVec3 = function (matrix, src, dst) {
   var m = matrix.m;
-  var w = dot([m[3], m[7], m[11]], src) + 1;
-  dst.x = (dot([m[0], m[4], m[8]], src) + m[12]) / w;
-  dst.y = (dot([m[1], m[5], m[9]], src) + m[13]) / w;
-  dst.z = (dot([m[2], m[6], m[10]], src) + m[14]) / w;
+  // var w = dot([m[3], m[7], m[11]], src) + 1;
+  // dst.x = (dot([m[0], m[4], m[8]], src) + m[12]) / w;
+  // dst.y = (dot([m[1], m[5], m[9]], src) + m[13]) / w;
+  // dst.z = (dot([m[2], m[6], m[10]], src) + m[14]) / w;
+  //dst.x =
   return dst;
 }
 
